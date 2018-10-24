@@ -1,3 +1,4 @@
+function [A,b,T] = InitialiseVariables()
 %GIVEN VARIABLES----------------------------------------------------
 k = 3; %thermal conductivity
 delta_x = 0.01; %change in x 
@@ -84,19 +85,3 @@ T(4,1:6)=x(19:24)';
 T(3,1:5)=x(25:29)';
 T(2,1:4)=x(30:33)';
 
-%PLOT TEMPERATURE MAP--------------------------------------------
-[X,Y]= meshgrid(0:.01:0.06,0.06:-.01:0);
-
-temperatures = T(~isnan(T));
-x = X(~isnan(T));
-y = Y(~isnan(T));
-tri = delaunay(x, y);
-
-for ii = 1:size(tri,1)
-indices = tri(ii,:);
-vertices = [x(indices) y(indices)];
-centroid = mean(vertices);
-text(centroid(1),centroid(2), num2str(ii));
-end
-
-tri([29,44,36],:) = [];
