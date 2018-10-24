@@ -10,7 +10,7 @@ spy(sparse(A));
 title("CSR");
 
 subplot(mm,nn, 3);
-spy(RCM);
+spy(banded_RCM);
 title("A RCM");
 
 subplot(mm,nn, 4);
@@ -22,10 +22,11 @@ spy(sprse);
 title("Sparse A");
 
 subplot(mm,nn, 5);
-spy(AMD);
+spy(sparse_AMD);
 title("AMD A");
 
-%%plotting temperature gradient ---------------
+%PLOT TEMPERATURE MAP--------------------------------------------
+[tri,temperatures,x,y] = makegrid(T);
 figure('rend','painters','pos',[1100 70 700 900]);
 trisurf(tri,x,y,temperatures)
 title("temperature plot");
@@ -53,5 +54,23 @@ spy(sprse_chol);
 title("sparse cholesky");
 
 subplot(mm,nn, 4);
-spy(CSR_chol);
+% spy(CSR_chol);
 title("CSR cholesky");
+
+
+%%Functions
+function [tri,temperatures,x,y]= makegrid(T)
+[X,Y]= meshgrid(0:.01:0.06,0.06:-.01:0);
+temperatures = T(~isnan(T));
+x = X(~isnan(T));
+y = Y(~isnan(T));
+tri = delaunay(x, y);
+
+for ii = 1:size(tri,1)
+indices = tri(ii,:);
+vertices = [x(indices) y(indices)];
+centroid = mean(vertices);
+text(centroid(1),centroid(2), num2str(ii));
+end
+tri([29,44,36],:) = [];
+end
