@@ -1,5 +1,5 @@
 function [A,B,C] = GenerateDataStructures(type, A)
-
+    
 if(type == "packed")
 %Generating a packed matrix
 [m,n] = size(A);
@@ -44,7 +44,12 @@ for i=1:length(row)-1
     if(row(i+1)~= row(i))
         row_ord =[row_ord, i+1];     
     end
+    
+    if(i ==length(row)-1)
+        row_ord = [row_ord, numel(col)+1];
+    end
 end
+
 A = CSR;
 B = row_ord;
 C = col;
