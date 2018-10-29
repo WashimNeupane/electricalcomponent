@@ -1,4 +1,4 @@
-function x1 = IterativeMethodCSR(type, a,row,col,b,omega)
+function [x1,numberOfIterations] = IterativeMethodCSR(type, a,row,col,b,omega)
 if nargin < 6
     omega =1;
 end
@@ -7,7 +7,7 @@ nb = length(b);
 n = length(a);
 nr = length(row);
 x0 = zeros(nr-1,1);
-max = 200;
+numberOfIterations =1;
 x = zeros(nb,1);
 tol =1*10^-10;
 
@@ -28,8 +28,7 @@ if(type == "Jacobi")
     end
     
 x1 = x;
-k = 1;
-while  k<max || norm(x1)<tol
+while norm(x1-x0,1)>tol
     for i = 1 : nr-1        
         bb = b(i);        
         for j = row(i):row(i+1)-1
@@ -45,14 +44,14 @@ while  k<max || norm(x1)<tol
     end
     x0 = x1;
     x1 = x_ny';
-    k = k + 1;
+    numberOfIterations = numberOfIterations + 1;
 end
 
 elseif(type == "GaussSiedel")
-x1 = SOR(a,row,col,b,1);
+[x1,numberOfIterations] = SOR(a,row,col,b,1,tol);
 
 elseif(type == "SOR")
-x1 = SOR(a,row,col,b,omega);
+[x1,numberOfIterations] = SOR(a,row,col,b,omega,tol);
 
 elseif(type == "ConjugateGradient")
 n = length(a);
@@ -100,12 +99,21 @@ while(norm(r)>tol)
        mag = (r'*d)/dtAd;
        x = x + mag*d;
     end
+    numberOfIterations = numberOfIterations + 1;
 end
  x1 = x;
 end
+end
 
 
-function x1 = SOR(a,row,col,b,omega)
+function [x1,k] = SOR(a,row,col,b,omega, tol)
+nb = length(b);
+n = length(a);
+nr = length(row);
+x0 = zeros(nr-1,1);
+k =1;
+x = zeros(nb,1);
+
  for i =1:nr-1
         bb = b(i);
         for j = row(i):row(i+1)-1
@@ -122,12 +130,12 @@ function x1 = SOR(a,row,col,b,omega)
        else
            x(i)= ((1-omega)*x(i-1)) +  (bb - aa*xx)* (omega/a(ii)); 
        end
+       x_pre(i) = x0(i);
        x0(i) = x(i);
       end
 x1 = x;
-k = 1;
 
-while k<max 
+while norm(x1-x_pre',1)>tol
      for i =1:nr-1
         bb = b(i);
         for j = row(i):row(i+1)-1
@@ -144,13 +152,11 @@ while k<max
        else
            x_ny(i)= ((1-omega)*x_ny(i-1)) +  (bb - aa*xx)* (omega/a(ii)); 
        end
+       x_pre(i) = x0(i);
        x1(i) = x_ny(i);
       end
     x0 = x1;
     x1 = x_ny';
-    k = k + 1;
+    k = k+1;
 end
-end
-
-
 end
