@@ -1,29 +1,17 @@
 %%plotting all images ---------------
-mm = 4; nn=2;
 figure('rend','painters','pos',[1100 70 700 900]);
-subplot(mm,nn, 1);
+subplot(2,2, [1 2]);
 spy(A);
 title("A");
-
-subplot(mm,nn, 2);
-spy(sparse(A));
-title("CSR");
-
-subplot(mm,nn, 3);
+ 
+subplot(2,2, 3);
 spy(banded_RCM);
-title("A RCM");
-
-subplot(mm,nn, 4);
-spy(banded);
 title("Banded A");
 
-subplot(mm,nn, 6);
+subplot(2,2, 4);
 spy(sprse);
 title("Sparse A");
 
-subplot(mm,nn, 5);
-spy(sparse_AMD);
-title("AMD A");
 
 %PLOT TEMPERATURE MAP--------------------------------------------
 [tri,temperatures,x,y] = makegrid(T);
@@ -39,24 +27,22 @@ grid off
 
 
 %%plotting cholesky ---------------
-mm = 2; nn=2;
 figure('rend','painters','pos',[1100 70 700 900]);
-subplot(mm,nn, 1);
+subplot(2,2, 1);
+spy(full_chol);
+title("full cholesky");
+
+subplot(2,2, 2);
 spy(packed_chol);
 title("packed cholesky");
 
-subplot(mm,nn, 2);
-spy(banded_chol);
+subplot(2,2, 3);
+spy(banded_chol_unpacked);
 title("banded cholesky");
 
-subplot(mm,nn, 3);
+subplot(2,2, 4);
 spy(sprse_chol);
 title("sparse cholesky");
-
-subplot(mm,nn, 4);
-% spy(CSR_chol);
-title("CSR cholesky");
-
 
 %%Functions
 function [tri,temperatures,x,y]= makegrid(T)
