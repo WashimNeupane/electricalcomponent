@@ -1,4 +1,5 @@
-function [x1,numberOfIterations] = IterativeMethodCSR(type, a,row,col,b,omega)
+function [x1,numberOfIterations,runtime] = IterativeMethodCSR(type, a,row,col,b,omega)
+tic
 if nargin < 6
     omega =1;
 end
@@ -9,7 +10,7 @@ nr = length(row);
 x0 = zeros(nr-1,1);
 numberOfIterations =1;
 x = zeros(nb,1);
-tol =1*10^-10;
+tol =1*10;
 
 %Jacobi
 if(type == "Jacobi")
@@ -103,6 +104,7 @@ while(norm(r)>tol)
 end
  x1 = x;
 end
+runtime = toc;
 end
 
 

@@ -17,6 +17,7 @@ for i = 1:n
 end
 x1 = x;
 k = 1;
+
 while norm(x1-x0,1) > tol
     for j = 1 : n
      x_ny(j) = ((b(j) - a(j,[1:j-1,j+1:n]) * x1([1:j-1,j+1:n])) / a(j,j));
@@ -65,9 +66,16 @@ while(norm(r)>tol)
 end
  x1 = x;
 end
+end
 
 %function SOR
 function x1 = SOR(omega)
+n = length(b);
+x_ny = zeros(1,n);
+x0 = zeros(n,1);
+tol=1;
+max = 100;
+
     x = zeros(n,1);
         for j = 1:n 
              if j==1
@@ -75,28 +83,26 @@ function x1 = SOR(omega)
              else    
                   x(j) = ((1-omega)*x(j-1))+ ((b(j) - a(j,[1:j-1,j+1:n]) * x0([1:j-1,j+1:n]))* (omega / a(j,j)));     
              end
+                  x_pre(j) = x0(j);
                   x0(j) = x(j);
         end
             x1 = x;
             k = 1;
             
-        while k<max || norm(x1-x0,1) > tol
+        while k<max || norm(x1-x_pre,1) > tol
              for j = 1 : n
                 if j == 1
                      x_ny(j) = ((b(j) - a(j,[1:j-1,j+1:n]) * x0([1:j-1,j+1:n])) / a(j,j));
                 else
                      x_ny(j) = ((1-omega)*x_ny(j-1))+((b(j) - a(j,[1:j-1,j+1:n]) * x1([1:j-1,j+1:n]))* (omega / a(j,j)));             
                 end
+                x_pre(j) = x1(j);
                  x1(j) = x_ny(j);
              end
              x0 = x1;
              x1 = x_ny';
              k = k + 1;
         end
-end
-
-
-
 end
 
 

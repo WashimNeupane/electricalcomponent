@@ -12,6 +12,32 @@ subplot(2,2, 4);
 spy(sprse);
 title("Sparse A");
 
+%%plots for node ordering 
+figure('rend','painters','pos',[1100 70 700 900]);
+subplot(3,2,1)
+spy(A); 
+title('matrix A')
+
+subplot(3,2,2)
+spy(full_chol); 
+title('matrix A cholesky')
+
+subplot(3,2,3)
+spy(banded_RCM)
+title('matrix A with reverse Cuthill-McKee ordering')
+
+subplot(3,2,4)
+spy(banded_chol_unpacked)
+title('Cholesky with RCM ordering')
+
+subplot(3,2,5)
+spy(sparse_AMD)
+title('matrix A with Approximate Minimum Degree Ordering')
+
+subplot(3,2,6)
+spy(sprse_chol)
+title('Cholesky A with AMD Ordering')
+
 
 %PLOT TEMPERATURE MAP--------------------------------------------
 [tri,temperatures,x,y] = makegrid(T);
@@ -37,7 +63,7 @@ spy(packed_chol);
 title("packed cholesky");
 
 subplot(2,2, 3);
-spy(banded_chol_unpacked);
+spy(banded_chol);
 title("banded cholesky");
 
 subplot(2,2, 4);
