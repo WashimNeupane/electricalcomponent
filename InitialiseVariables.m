@@ -1,4 +1,4 @@
-function [A,b,T] = InitialiseVariables()
+function [A,b,T,T_inf_max, T_inf_min] = InitialiseVariables()
 %GIVEN VARIABLES----------------------------------------------------
 k = 3; %thermal conductivity
 delta_x = 0.01; %change in x 
@@ -60,12 +60,12 @@ b=zeros(n,1);
 b(6)=40;
 b(12)=40;
 b(18)=40;
-b(24)=40+(delta_y*h/k*T_inf); %ROW 24
-b(29)=sqrt(2)*h*delta_y*T_inf; %ROW 29
+b(24)=40+(delta_y*h*T_inf/k); %ROW 24
+b(29)=sqrt(2)*h*delta_y*T_inf/k; %ROW 29
 b(30)=70;
 b(31)=70;
 b(32)=70;
-b(33)=70+(delta_x*h/k*T_inf); %ROW 33
+b(33)=70+(delta_x*h*T_inf/k); %ROW 33
 
 %Find the numerical solution to Ax=b
 x=A\b;
@@ -84,4 +84,33 @@ T(5,1:6)=x(13:18)';
 T(4,1:6)=x(19:24)';
 T(3,1:5)=x(25:29)';
 T(2,1:4)=x(30:33)';
+
+%TO FIND AMBIENT TEMPERATURE RANGE
+T_inf_max = 20;
+T_inf_min = 20;
+%to find max temp
+x_amb = A\b;
+while(x_amb(22)< 55)
+    T_inf_max = T_inf_max + 0.01;
+    
+    b(24)=40+(delta_y*h*T_inf_max/k); %ROW 24
+    b(29)=sqrt(2)*h*delta_y*T_inf_max/k; %ROW 29
+    b(33)=70+(delta_x*h*T_inf_max/k); %ROW 33  
+    
+    x_amb = A\b;
+end
+T_inf_max = T_inf_max - 0.01;
+
+%to find min temp
+while(x_amb(22)> 50)
+    T_inf_min = T_inf_min - 0.01;
+    
+    b(24)=40+(delta_y*h*T_inf_min/k); %ROW 24
+    b(29)=sqrt(2)*h*delta_y*T_inf_min/k; %ROW 29
+    b(33)=70+(delta_x*h*T_inf_min/k); %ROW 33  
+    
+    x_amb = A\b;
+end
+
+T_inf_min = T_inf_min + 0.01;
 

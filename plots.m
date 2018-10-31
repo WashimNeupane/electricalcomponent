@@ -1,4 +1,4 @@
-%%plotting all images ---------------
+%%plotting all images  --------------------------------------------------
 figure('rend','painters','pos',[1100 70 700 900]);
 subplot(2,2, [1 2]);
 spy(A);
@@ -12,7 +12,7 @@ subplot(2,2, 4);
 spy(sprse);
 title("Sparse A");
 
-%%plots for node ordering 
+%%plots for node ordering -----------------------------------------------
 figure('rend','painters','pos',[1100 70 700 900]);
 subplot(3,2,1)
 spy(A); 
@@ -52,7 +52,7 @@ axis image
 grid off
 
 
-%%plotting cholesky ---------------
+%%plotting cholesky -----------------------------------------------
 figure('rend','painters','pos',[1100 70 700 900]);
 subplot(2,2, 1);
 spy(full_chol);
@@ -70,7 +70,7 @@ subplot(2,2, 4);
 spy(sprse_chol);
 title("sparse cholesky");
 
-%%Functions
+%%Functions------------------------------------------------------
 function [tri,temperatures,x,y]= makegrid(T)
 [X,Y]= meshgrid(0:.01:0.06,0.06:-.01:0);
 temperatures = T(~isnan(T));

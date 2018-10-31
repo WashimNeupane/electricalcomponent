@@ -10,6 +10,7 @@ for j= 1:m
     end
 end
 A = array;
+%--------------------------------------------
 
 elseif(type== "band")
 %Generating a band matrix with RCM ordering
@@ -17,13 +18,14 @@ p = symrcm(A);
 B = A(p,p);
 A = triu(B);
 A = spdiags(A);
+%----------------------------------------------
 
 elseif(type =="sparse")
 %Generate a sparse matrix with AMD ordering
 s = symamd(A);
 B = A(s,s);
 A = sparse(B);
-
+%----------------------------------------------
 elseif(type=="CSR")
 %Generate a CSR ordered matrix
 row= zeros(0);
@@ -54,3 +56,4 @@ A = CSR;
 B = row_ord;
 C = col;
 end
+%----------------------------------------------------

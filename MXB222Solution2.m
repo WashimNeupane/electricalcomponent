@@ -1,5 +1,10 @@
 %%Initialise the coefficient matrix using 5 point central differnence method. 
-[A,b,T] = InitialiseVariables;
+%A = coefficient matrix
+%b = solution vector
+%T = Temperature using 5 point central difference within chip
+%T_inf_max = 
+%T_inf_min = 
+[A,b,T,T_inf_max, T_inf_min] = InitialiseVariables;
 
 %%Check if coefficient matrix is SPD or not
 isSPD(A);
@@ -38,8 +43,8 @@ sprse_chol                       = chlsky("sparse", triu(sprse));
 z                                = substitution("forward", sprse_chol', b);
 X_sprse                          = substitution("backward", sprse_chol, z); 
 
-i = 11; %runtime
-j = 5; %iterations
+i = 13; %runtime
+j = 7; %iterations
 %%Generate the solution to CSR using iterative methods
 [CSR_Jacobi, iteration(j,1),runtime(i,1)]                  = IterativeMethodCSR("Jacobi", CSR,CSR_RRow,CSR_RCol,b);
 [CSR_GaussSeidel, iteration(j,2),runtime(i,2)]             = IterativeMethodCSR("GaussSiedel", CSR,CSR_RRow,CSR_RCol,b);
@@ -56,5 +61,5 @@ j = 5; %iterations
 Sol = A\b; 
 
 %Uncomment code below to generate all plots
-plots;
-efficiency;
+% plots;
+% efficiency;

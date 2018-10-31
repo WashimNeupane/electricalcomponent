@@ -2,7 +2,7 @@ function [A, A_packed] = chlsky(type, A)
 %%INPUT PARAMETERS
 %matrix =>    Pass on a matrix in either packed, banded, sparse or CSR form. 
 %type == full :  the cholesky factor for full   2d array. 
-%type == pacekd :  the cholesky factor for packed 1d array. 
+%type == packed :  the cholesky factor for packed 1d array. 
 %type == band :  the cholesky factor for band   2d array. 
 %type == sparse :  the cholesky factor for sparse 2d array. 
 %type == CSR :  the cholesky factor for CSR    2d array. 
@@ -20,6 +20,7 @@ if(type == "full" || type == "sparse")
     A(j,j) = sqrt(A(j,j));
     end
  
+ %-----------------------------------------------------------------------   
 elseif(type == "packed")   
     m = 33;
     A_packed = A;
@@ -42,6 +43,7 @@ elseif(type == "packed")
     end
  end
  
+ %%------------------------------------------------------------------------
 elseif(type == "band")
     [n,m] = size(A);
     bw = m-1;
@@ -62,33 +64,6 @@ elseif(type == "band")
       end
     A(j,1) = sqrt(A(j,1));   
     end
-    
-    
-elseif(type == "sparse")
-    %%input code here
-m = 33;
-    A_packed = A;
-
-    for j = 1:m             
-      for i = 1:j-1         
-         for k = 1:i-1                
-             A(i,j) = A_packed(i+(j*(j-1)/2)) - A_packed(k+(i*(i-1)/2)) * A_packed(k+(j*(j-1)/2)); 
-         end              
-         A(i,j) = A_packed(i+(j*(j-1)/2)) / A_packed(i+(i*(i-1)/2));
-         A(j,j) = A_packed(j+(j*(j-1)/2)) - A_packed(i+(j*(j-1)/2))^2; 
-       end
-    A(j,j) = sqrt(A_packed(j+(j*(j-1)/2)));
-    end
+ %%------------------------------------------------------------------------   
 end
 
-function L=unpack(B)
-[m,n]=size(B);
-L=zeros(m,n);
-for i=1:m
-for j=1:n
-ind=j+ (i-1);
-if ind<=m
-L(i,ind)=B(i,j);
-end
-end
-end
