@@ -2,8 +2,8 @@
 %A = coefficient matrix
 %b = solution vector
 %T = Temperature using 5 point central difference within chip
-%T_inf_max = 
-%T_inf_min = 
+%T_inf_max = max temp for ambient temperature question
+%T_inf_min = min temp for ambient temperature question
 [A,b,T,T_inf_max, T_inf_min] = InitialiseVariables;
 
 %%Check if coefficient matrix is SPD or not
@@ -43,8 +43,8 @@ sprse_chol                       = chlsky("sparse", triu(sprse));
 z                                = substitution("forward", sprse_chol', b);
 X_sprse                          = substitution("backward", sprse_chol, z); 
 
-i = 13; %runtime
-j = 7; %iterations
+i = 1; %runtime index
+j = 1; %iterations index
 %%Generate the solution to CSR using iterative methods
 [CSR_Jacobi, iteration(j,1),runtime(i,1)]                  = IterativeMethodCSR("Jacobi", CSR,CSR_RRow,CSR_RCol,b);
 [CSR_GaussSeidel, iteration(j,2),runtime(i,2)]             = IterativeMethodCSR("GaussSiedel", CSR,CSR_RRow,CSR_RCol,b);
